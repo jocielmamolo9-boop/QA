@@ -1,10 +1,10 @@
 import React from 'react';
 import { NavLink } from 'react-router-dom';
-import { LogOut, ClipboardList, PlusCircle, ShieldAlert } from 'lucide-react';
+import { LogOut, ClipboardList, PlusCircle, ShieldAlert, Sun, Moon } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 
 const Navbar: React.FC = () => {
-  const { user, logout } = useAppContext();
+  const { user, logout, theme, toggleTheme } = useAppContext();
 
   return (
     <header className="navbar">
@@ -33,6 +33,9 @@ const Navbar: React.FC = () => {
             <span className="user-name">{user?.username}</span>
             <span className={`user-role role-${user?.role?.toLowerCase()}`}>{user?.role}</span>
           </div>
+          <button onClick={toggleTheme} className="btn-logout" title="Toggle Theme">
+            {theme === 'light' ? <Moon size={20} /> : <Sun size={20} />}
+          </button>
           <button onClick={logout} className="btn-logout" title="Log out">
             <LogOut size={20} />
           </button>

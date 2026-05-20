@@ -1,10 +1,10 @@
 import React, { useState } from 'react';
-import { ShieldCheck, User as UserIcon, Lock } from 'lucide-react';
+import { ShieldCheck, User as UserIcon, Lock, Sun, Moon } from 'lucide-react';
 import { useAppContext } from '../context/AppContext';
 import type { Role } from '../types';
 
 const Login: React.FC = () => {
-  const { login } = useAppContext();
+  const { login, theme, toggleTheme } = useAppContext();
   
   const [step, setStep] = useState<1 | 2>(1);
   const [username, setUsername] = useState('');
@@ -33,7 +33,15 @@ const Login: React.FC = () => {
   };
 
   return (
-    <div className="login-container">
+    <div className="login-container" style={{ position: 'relative' }}>
+      <button 
+        onClick={toggleTheme} 
+        className="btn-icon" 
+        title="Toggle Theme" 
+        style={{ position: 'absolute', top: '1.5rem', right: '1.5rem' }}
+      >
+        {theme === 'light' ? <Moon size={24} /> : <Sun size={24} />}
+      </button>
       <div className="login-card">
         <div className="login-header">
           <div className="icon-wrapper">

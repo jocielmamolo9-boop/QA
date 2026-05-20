@@ -8,6 +8,8 @@ interface AppContextType {
   testCases: TestCase[];
   addTestCase: (testCase: TestCase) => void;
   updateTestCase: (id: string, updates: Partial<TestCase>) => void;
+  theme: 'light' | 'dark';
+  toggleTheme: () => void;
 }
 
 const AppContext = createContext<AppContextType | undefined>(undefined);
@@ -23,6 +25,11 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     return savedCases ? JSON.parse(savedCases) : [];
   });
 
+  const [theme, setTheme] = useState<'light' | 'dark'>(() => {
+    const savedTheme = localStorage.getItem('qa_theme');
+    return (savedTheme as 'light' | 'dark') || 'dark';
+  });
+
   useEffect(() => {
     if (user) {
       localStorage.setItem('qa_user', JSON.stringify(user));
@@ -34,6 +41,11 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
   useEffect(() => {
     localStorage.setItem('qa_test_cases', JSON.stringify(testCases));
   }, [testCases]);
+
+  useEffect(() => {
+    document.documentElement.setAttribute('data-theme', theme);
+    localStorage.setItem('qa_theme', theme);
+  }, [theme]);
 
   const login = (newUser: User) => setUser(newUser);
   const logout = () => setUser(null);
@@ -48,9 +60,11 @@ export const AppContextProvider: React.FC<{ children: React.ReactNode }> = ({ ch
     );
   };
 
+  const toggleTheme = () => setTheme((prev) => (prev === 'dark' ? 'light' : 'dark'));
+
   return (
     <AppContext.Provider
-      value={{ user, login, logout, testCases, addTestCase, updateTestCase }}
+      value={{ user, login, logout, testCases, addTestCase, updateTestCase, theme, toggleTheme }}
     >
       {children}
     </AppContext.Provider>
